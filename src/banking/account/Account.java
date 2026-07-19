@@ -62,6 +62,5 @@ public abstract class Account {
         return true;
     }
 
-
-    public abstract WithdrawResult withdraw(double amount);
+    public abstract WithdrawResult withdraw(double amount, boolean forceOverride);
 }
