@@ -59,6 +59,7 @@ public class Main {
                     } else {
                         if (result == WithdrawResult.BELOW_MINIMUM_BALANCE) {
                             System.out.print("This will breach minimum balance. Proceed anyway? (y/n): ");
+                            scanner.nextLine();
                             String confirm = scanner.nextLine();
                             if (confirm.equalsIgnoreCase("y")) {
                                 result = bankManager.withdraw(accNum, amount, true);
