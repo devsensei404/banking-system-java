@@ -18,9 +18,10 @@ public class Main {
                     1. Create Account
                     2. Deposit
                     3. Withdraw
-                    4. Check Balance
-                    5. Transaction History
-                    6. Exit
+                    4. Transfer
+                    5. Check Balance
+                    6. Transaction History
+                    7. Exit
                     """);
 
             System.out.print("Choose an option: ");
@@ -75,11 +76,20 @@ public class Main {
                     }
                 }
                 case 4 -> {
+                    System.out.print("Enter source account number: ");
+                    long fromAccNum = scanner.nextLong();
+                    System.out.print("Enter destination account number: ");
+                    long toAccNum = scanner.nextLong();
+                    System.out.print("Enter transfer amount: ");
+                    double amount = scanner.nextDouble();
+                    System.out.println(bankManager.transfer(fromAccNum, toAccNum, amount));
+                }
+                case 5 -> {
                     System.out.print("Enter account number: ");
                     long accNum = scanner.nextLong();
                     System.out.println(bankManager.getBalance(accNum));
                 }
-                case 5 -> {
+                case 6 -> {
                     System.out.print("Enter account number: ");
                     long accNum = scanner.nextLong();
                     List<String> history = bankManager.getTransactionHistory(accNum);
@@ -91,7 +101,7 @@ public class Main {
                         }
                     }
                 }
-                case 6 -> {
+                case 7 -> {
                     System.out.println("Goodbye. Signing Off");
                     running = false;
                 }

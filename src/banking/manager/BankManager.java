@@ -1,11 +1,11 @@
 package banking.manager;
-import java.util.Map;
-import java.util.HashMap;
 import banking.account.*;
-import banking.transaction.TransactionType;
 import banking.transaction.Transaction;
-import java.util.List;
+import banking.transaction.TransactionType;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BankManager {
 
@@ -84,6 +84,39 @@ public class BankManager {
             }
 
             return history;
+        }
+
+        public String transfer(long fromAccNum, long toAccNum, double amount) {
+            if (amount < Account.MIN_DEPOSIT) {
+                return String.format("Transfer failed: amount must be at least ₹%.2f", Account.MIN_DEPOSIT);
+            }
+
+            Account fromAccount = accounts.get(fromAccNum);
+            Account toAccount = accounts.get(toAccNum);
+
+            if (fromAccount == null || toAccount == null) {
+                return "Transfer failed: one or both account numbers were not found.";
+            }
+
+            WithdrawResult withdrawResult = fromAccount.withdraw(amount, false);
+            if (withdrawResult != WithdrawResult.SUCCESS) {
+                return switch (withdrawResult) {
+                    case INVALID_AMOUNT -> "Transfer failed: invalid amount.";
+                    case INSUFFICIENT_FUNDS -> "Transfer failed: insufficient funds in source account.";
+                    case BELOW_MINIMUM_BALANCE -> "Transfer cancelled: would breach minimum balance on source account.";
+                    case EXCEEDS_OVERDRAFT_LIMIT -> "Transfer failed: exceeds overdraft limit on source account.";
+                    default -> "Transfer failed.";
+                };
+            }
+
+            toAccount.deposit(amount);
+
+            fromAccount.addTransaction(new Transaction(amount, TransactionType.DEBIT));
+            toAccount.addTransaction(new Transaction(amount, TransactionType.CREDIT));
+
+            return String.format(
+                    "Transfer successful: Rs.%.2f sent from account %d to account %d.%nNew balance (source): Rs.%.2f",
+                    amount, fromAccNum, toAccNum, fromAccount.getBalance());
         }
 
     }

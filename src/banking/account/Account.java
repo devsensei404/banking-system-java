@@ -1,7 +1,7 @@
 package banking.account;
 import banking.transaction.Transaction;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Account {
 
@@ -10,7 +10,7 @@ public abstract class Account {
     private String holderName;
     private double balance;
     private List<Transaction> transactionList;
-    private static final double MIN_DEPOSIT = 500.0;
+    public static final double MIN_DEPOSIT = 500.0;
 
     protected Account(String name) {
         this.accountNumber=counter++;
